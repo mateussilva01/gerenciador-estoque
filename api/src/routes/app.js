@@ -3,7 +3,7 @@ const app = express();
 
 app.use(express.json());
 
-const Produto = require('./models/Produto');
+const Produto = require('../model/produto');
 
 app.get("/list-produto", async (req, res) => {
   await Produto.findAll({
