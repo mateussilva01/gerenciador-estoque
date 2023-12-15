@@ -1,11 +1,6 @@
-const express = require('express');
-const app = express();
+const Produto = require('../model/produto.entitie');
 
-app.use(express.json());
-
-const Produto = require('../model/produto');
-
-app.get("/list-produto", async (req, res) => {
+const findAll = (async (req, res) => {
   await Produto.findAll({
     attributes: ['id', 'nome', 'preco_compra', 'preco_venda', 'quantidade'],
     order: [['id', 'DESC']]
@@ -23,7 +18,7 @@ app.get("/list-produto", async (req, res) => {
   });
 });
 
-app.post("/cad-produto", async (req, res) => {
+const save = (async (req, res) => {
   await Produto.create(req.body)
   .then(() => {
     return res.json({
@@ -38,7 +33,7 @@ app.post("/cad-produto", async (req, res) => {
   });
 });
 
-app.get("/view-produto/:id", async (req, res) => {
+const get = (async (req, res) => {
   const { id } = req.params;
   await Produto.findByPk(id)
   .then((produto) => {
@@ -54,7 +49,7 @@ app.get("/view-produto/:id", async (req, res) => {
   });
 });
 
-app.put("/edit-produto", async (req, res) => {
+const update = (async (req, res) => {
   const { id } = req.body;
   await Produto.update(req.body, {where: {id}})
   .then(() => {
@@ -70,7 +65,7 @@ app.put("/edit-produto", async (req, res) => {
   });
 });
 
-app.delete("/delete-produto/:id", async (req, res) => {
+const remove = (async (req, res) => {
   const { id } = req.params;
   await Produto.destroy({where: {id}})
   .then(() => {
@@ -86,6 +81,4 @@ app.delete("/delete-produto/:id", async (req, res) => {
   });
 });
 
-app.listen(8080, () => {
-  console.log("Servidor iniciado na porta 8080: http://localhost:8080");
-});
+module.exports = {findAll, save, get, update, remove};
