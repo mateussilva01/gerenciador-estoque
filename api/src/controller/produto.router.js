@@ -13,7 +13,7 @@ const findAll = (async (req, res) => {
   }).catch(() => {
     return res.status(400).json({
       erro: true,
-      message: 'Nenhum produto encontrado.'
+      mensagem: 'Nenhum produto encontrado.'
     });
   });
 });
@@ -23,12 +23,12 @@ const save = (async (req, res) => {
   .then(() => {
     return res.json({
       erro: false,
-      message: 'Produto cadastrado com sucesso.'
+      mensagem: 'Produto cadastrado com sucesso.'
     });
   }).catch(() => {
     return res.status(400).json({
       erro: true,
-      message: 'Não foi possível cadastrar o produto.'
+      mensagem: 'Não foi possível cadastrar o produto.'
     });
   });
 });
@@ -44,7 +44,7 @@ const get = (async (req, res) => {
   }).catch(() => {
     return res.status(400).json({
       erro: true,
-      message: 'Nenhum produto encontrado.'
+      mensagem: 'Nenhum produto encontrado.'
     });
   });
 });
@@ -55,7 +55,7 @@ const update = (async (req, res) => {
   .then(() => {
     return res.json({
       erro: false,
-      message: "Produto editado com sucesso."
+      mensagem: "Produto editado com sucesso."
     });
   }).catch(() => {
     return res.status(400).json({
@@ -71,12 +71,12 @@ const remove = (async (req, res) => {
   .then(() => {
     return res.json({
       erro: false,
-      message: "Produto excluído com sucesso."
+      mensagem: "Produto excluído com sucesso."
     });
   }).catch(() => {
     return res.status(400).json({
       erro: true,
-      message: "Não foi possível excluir o produto."
+      mensagem: "Não foi possível excluir o produto."
     });
   });
 });

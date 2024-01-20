@@ -30,4 +30,5 @@ Sequelize é uma biblioteca Javascript que facilita o gerenciamento de um banco 
 Instalar o driver do banco de dados
 ### npm install --save pg pg-hstore # Postgres
 
-
+Permitir acesso a api
+### npm i --save cors

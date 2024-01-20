@@ -10,33 +10,36 @@ import {
   ButtonWarning,
   ButtonDanger,
   Table,
-  AlertSuccess
+  AlertSuccess,
+  AlertDanger
 } from '../../styles/custom_adm';
+import api from '../../config/configApi';
 
 export const Listar = () => {
   const { state } = useLocation();
   const [data, setData] = useState([]);
-  const [ status ] = useState({
+  const [status, setStatus ] = useState({
     type: state ? state.type : "",
     mensagem: state ? state.mensagem : ""
   });
 
-  const listarProdutos = () => {
-    var valores = [
-      {
-        "id": 1,
-        "nome": "Teclado",
-        "valor": 120.50,
-        "quantidade": 30
-      },
-      {
-        "id": 2,
-        "nome": "Mouse",
-        "valor": 50.55,
-        "quantidade": 10
+  const listarProdutos = async () => {
+    await api.get('/produto')
+    .then((response) => {
+      setData(response.data.produtos);
+    }).catch((err) => {
+      if(err.response) {
+        setStatus({
+          type: "error",
+          mensagem: err.response.data.mensagem
+        });
+      } else {
+        setStatus({
+          type: "error",
+          mensagem: "Erro: Tente mais tarde."
+        });
       }
-    ]
-    setData(valores);
+    });
   }
 
   useEffect(() => {
@@ -44,7 +47,26 @@ export const Listar = () => {
   },[]);
 
   const apagarProduto = async (idProduto) => {
-    alert('Apagar o produto: ' + idProduto);
+    await api.delete("/produto/" + idProduto)
+    .then((response) => {
+      setStatus({
+        type: "success",
+        mensagem: response.data.mensagem
+      });
+      listarProdutos();
+    }).catch((err) => {
+      if(err.response) {
+        setStatus({
+          type: "error",
+          mensagem: err.response.data.mensagem
+        });
+      } else {
+        setStatus({
+          type: "error",
+          mensagem: "Erro: Tente mais tarde."
+        });
+      }
+    });
   };
 
   return (
@@ -59,13 +81,14 @@ export const Listar = () => {
         </BotaoAcao>
       </ConteudoTitulo>
       { status.type === "success" ? <AlertSuccess>{status.mensagem}</AlertSuccess> : "" }
+      { status.type === 'error' ? <AlertDanger>{status.mensagem}</AlertDanger> : "" }
       <hr />
       <Table>
         <thead>
           <tr>
             <th>ID</th>
             <th>Nome</th>
-            <th>Valor</th>
+            <th>Preço</th>
             <th>Quantidade</th>
             <th>Ações</th>
           </tr>
@@ -75,7 +98,12 @@ export const Listar = () => {
             <tr key={produto.id}>
               <td>{produto.id}</td>
               <td>{produto.nome}</td>
-              <td>{produto.valor}</td>
+              <td>{
+                new Intl.NumberFormat('pt-br', {
+                  style: 'currency',
+                  currency: 'BRL'
+                }).format(produto.preco_venda)}
+              </td>
               <td>{produto.quantidade}</td>
               <td>
                 <Link to={"/visualizar/" + produto.id}>
@@ -89,7 +117,7 @@ export const Listar = () => {
                 </Link>
               </td>
             </tr>
-          ))}
+          )) }
         </tbody>
       </Table>
     </Container>
