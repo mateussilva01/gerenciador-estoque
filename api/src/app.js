@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const routes = require("../routes/routes");
+const routes = require("../src/modules/produto/controller/produtoController");
 const app = express();
+const port = 8080;
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -13,6 +14,6 @@ app.use((req, res, next) => {
 });
 app.use(routes);
 
-app.listen(8080, () => {
-  console.log("Servidor iniciado na porta 8080: http://localhost:8080");
+app.listen(port, () => {
+  console.log("Servidor iniciado: http://localhost:8080");
 });

@@ -1,0 +1,25 @@
+#Implementações
+
+
+
+#Realizadas
+
+
+#Paradas
+
+
+#Pesquisas
+Organização da estrutura de pastas/arquivos/
+formatação de valores
+tema dark
+paginação dinâmica
+gráfico
+relatório
+exportação pdf
+dashboard com os gráficos de controle de estoque
+
+Links:
+https://www.nextar.com.br/recursos/controle-de-estoque
+
+
+
