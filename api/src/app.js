@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const routes = require("../src/modules/produto/controller/produtoController");
+const routesUser = require("../src/modules/user/controller/userController");
 const app = express();
 const port = 8080;
 
@@ -13,6 +14,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use(routes);
+app.use(routesUser)
 
 app.listen(port, () => {
   console.log("Servidor iniciado: http://localhost:8080");
