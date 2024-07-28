@@ -32,3 +32,6 @@ Instalar o driver do banco de dados
 
 Permitir acesso a api
 ### npm i --save cors
+
+Instalar o módulo para criptografar a senha
+### npm i --save bcryptjs

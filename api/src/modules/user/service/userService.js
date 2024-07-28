@@ -1,4 +1,5 @@
 const User = require('../model/User');
+const bcrypt = require('bcryptjs');
 
 const findAll = (async (req, res) => {
   await User.findAll({
@@ -19,7 +20,9 @@ const findAll = (async (req, res) => {
 });
 
 const save = (async (req, res) => {
-  await User.create(req.body)
+  var dados = req.body;
+  dados.password = await bcrypt.hash(dados.password, 8);
+  await User.create(dados)
   .then(() => {
     return res.json({
       erro: false,
@@ -51,7 +54,9 @@ const get = (async (req, res) => {
 
 const update = (async (req, res) => {
   const { id } = req.body;
-  await User.update(req.body, { where: {id} })
+  const dados = req.body;
+  dados.password = await bcrypt.hash(dados.password, 8);
+  await User.update(dados, { where: {id} })
   .then(() => {
     return res.json({
       erro: false,
