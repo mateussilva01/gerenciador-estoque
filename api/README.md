@@ -35,3 +35,9 @@ Permitir acesso a api
 
 Instalar o módulo para criptografar a senha
 ### npm i --save bcryptjs
+
+Instalar a dependência para gerar o token
+### npm i --save jsonwebtoken@8.5.1
+
+Gerenciar variáveis de ambiente
+### npm i --save dotenv@10.0.0

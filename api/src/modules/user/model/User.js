@@ -22,9 +22,6 @@ const User = db.define('users', {
 })
 
 //Create table
-//User.sync();
-
-//If exist change
-//Produto.sync({ alter: true })
+User.sync();
 
 module.exports = User;

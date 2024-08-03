@@ -8,7 +8,8 @@ const findAll = (async (req, res) => {
   .then((produtos) => {
     return res.json({
       erro: false,
-      produtos
+      produtos,
+      //idUsuario: req.userId
     });
   }).catch(() => {
     return res.status(400).json({

@@ -1,5 +1,7 @@
 const User = require('../model/User');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const findAll = (async (req, res) => {
   await User.findAll({
@@ -86,4 +88,32 @@ const remove = (async (req, res) => {
   });
 });
 
-module.exports = { findAll, save, get, update, remove };
+const login = (async (req, res) => {
+  const user = await User.findOne({
+    attributes: ['id', 'name', 'email', 'password'],
+    where: {
+      email: req.body.email
+    }
+  });
+  if(user === null) {
+    return res.status(400).json({
+      erro: true,
+      mensagem: "Erro: Usuário ou a senha incorreta."
+    })
+  }
+  if(!(await bcrypt.compare(req.body.password, user.password))) {
+    return res.status(400).json({
+      erro: true,
+      mensagem: "Erro: Usuário ou a senha incorreta."
+    })
+  }
+  var token = jwt.sign({ id: user.id }, process.env.SECRET, {
+    expiresIn: '1 day'
+  })
+  return res.json({
+    erro: false,
+    token
+  })
+});
+
+module.exports = { findAll, save, get, update, remove, login };
