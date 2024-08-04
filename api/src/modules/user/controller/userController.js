@@ -4,6 +4,8 @@ const { eAdmin } = require("../../../../middlewares/auth");
 
 const routes = express.Router();
 
+
+routes.get("/val-token", eAdmin, user.validaToken);
 routes.post("/login", user.login);
 routes.get("/user", eAdmin, user.findAll);
 routes.post("/user", eAdmin, user.save);

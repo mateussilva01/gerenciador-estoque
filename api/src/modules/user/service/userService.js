@@ -116,4 +116,19 @@ const login = (async (req, res) => {
   })
 });
 
-module.exports = { findAll, save, get, update, remove, login };
+const validaToken = async (req, res) => {
+  await User.findByPk(req.userId, { attributes: ['id', 'name', 'email'] })
+  .then((user) => {
+    return res.json({
+      erro: false,
+      user
+    });
+  }).catch(() => {
+    return res.status(400).json({
+      erro: true,
+      mensagem: 'Erro: Necessário realizar o login para acessar a página.' 
+    })
+  })
+};
+
+module.exports = { findAll, save, get, update, remove, login, validaToken };
