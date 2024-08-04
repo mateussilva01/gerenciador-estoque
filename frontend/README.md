@@ -24,3 +24,6 @@ Transforma o CSS em componentes
 
 Realizar chamada a API
 ### npm i --save axios
+
+Utilizado para mudar de página e renderizar a nova página sem recarregar toda aplicação
+### npm i --save history@4.10.1

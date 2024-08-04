@@ -1,24 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 
-import { Dashboard } from './pages/Dashboard';
-import { Listar } from './pages/Listar';
-import { Visualizar } from './pages/Visualizar';
-import { Cadastrar } from './pages/Cadastrar';
-import { Editar } from './pages/Editar';
+import Routes from './routes/routesAdm'
+
+import history from './services/history';
+
+import { AuthProvider } from './Context/AuthContext';
 
 function App() {
   return (
     <div>
-      <Router>
-        <Switch>
-          <Route exact path="/" component={Dashboard} />
-          <Route exact path="/listar" component={Listar} />
-          <Route exact path="/visualizar/:id" component={Visualizar} />
-          <Route exact path="/cadastrar" component={Cadastrar} />
-          <Route exact path="/editar/:id" component={Editar} />
-        </Switch>
-      </Router>
+      <AuthProvider>
+        <Router history={history}>
+          <Routes />
+        </Router>
+      </AuthProvider>
     </div>
   );
 }

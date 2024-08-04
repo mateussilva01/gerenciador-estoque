@@ -13,19 +13,20 @@ import {
 import api from '../../config/configApi';
 
 export const Visualizar = (props) => {
-
   const [id] = useState(props.match.params.id);
   const [data, setData] = useState("");
-  const [status, setStatus ] = useState({
-    type: "",
-    mensagem: ""
-  });
+  const [status, setStatus ] = useState({ type: "", mensagem: "" });
 
   useEffect(() => {
     const getProdutos = async () => {
-      await api.get('/produto/' + id)
+      const headers = {
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+      await api.get('/produto/' + id, headers)
       .then((response) => {
-        console.log(response);
         setData(response.data.produto);
       }).catch((err) => {
         if(err.response) {
@@ -42,7 +43,7 @@ export const Visualizar = (props) => {
       })
     }
     getProdutos();
-  },[id])
+  }, [id])
 
   return (
     <Container>

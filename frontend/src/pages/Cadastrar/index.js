@@ -40,7 +40,8 @@ export const Cadastrar = () => {
 
     const headers = {
       'headers': {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     }
 
@@ -67,28 +68,24 @@ export const Cadastrar = () => {
   }
 
   const valuePrecoCompra = async e => {
-     //Formato para visualização
     var valorPrecoCompraInput = e.target.value;
     valorPrecoCompraInput = valorPrecoCompraInput.replace(/\D/g, "");
     valorPrecoCompraInput = valorPrecoCompraInput.replace(/(\d)(\d{2})$/, "$1,$2");
     valorPrecoCompraInput = valorPrecoCompraInput.replace(/(?=(\d{3})+(\D))\B/g, ".");
     setPrecoCompraTarget(valorPrecoCompraInput);
 
-    //Formato para salvar no banco
     var precoCompraSalvar  = await valorPrecoCompraInput.replace(".", "");
     precoCompraSalvar = await precoCompraSalvar.replace(",", ".");
     setProduto({ ...produto, preco_compra: precoCompraSalvar });
   }
 
   const valuePrecoVenda = async e => {
-     //Formato para visualização
     var precoVendaInput = e.target.value;
     precoVendaInput = precoVendaInput.replace(/\D/g, "");
     precoVendaInput = precoVendaInput.replace(/(\d)(\d{2})$/, "$1,$2");
     precoVendaInput = precoVendaInput.replace(/(?=(\d{3})+(\D))\B/g, ".");
     setPrecoVendaTarget(precoVendaInput);
 
-    //Formato para salvar no banco
     var precoSalvarSalvar  = await precoVendaInput.replace(".", "");
     precoSalvarSalvar = await precoSalvarSalvar.replace(",", ".");
     setProduto({ ...produto, preco_venda: precoSalvarSalvar });

@@ -37,7 +37,8 @@ export const Editar = (props) => {
     e.preventDefault();
     const headers = {
       'headers': {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     }
 
@@ -64,7 +65,12 @@ export const Editar = (props) => {
 
   useEffect(() => {
     const getProduto = async () => {
-      await api.get('/produto/' + id)
+      const headers = {
+        'headers': {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      }
+      await api.get('/produto/' + id, headers)
       .then((response) => {
         setNome(response.data.produto.nome);
         setPrecoCompra(response.data.produto.preco_compra);

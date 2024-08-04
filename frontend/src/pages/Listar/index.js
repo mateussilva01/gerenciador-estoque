@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Menu } from '../../components/Menu';
 import { Link, useLocation } from 'react-router-dom';
+
 import {
   Container,
   ConteudoTitulo,
@@ -16,6 +17,7 @@ import {
 import api from '../../config/configApi';
 
 export const Listar = () => {
+
   const { state } = useLocation();
   const [data, setData] = useState([]);
   const [status, setStatus ] = useState({
@@ -24,7 +26,12 @@ export const Listar = () => {
   });
 
   const listarProdutos = async () => {
-    await api.get('/produto')
+    const headers = {
+      'headers': {
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    }
+    await api.get('/produto', headers)
     .then((response) => {
       setData(response.data.produtos);
     }).catch((err) => {
@@ -47,7 +54,12 @@ export const Listar = () => {
   },[]);
 
   const apagarProduto = async (idProduto) => {
-    await api.delete("/produto/" + idProduto)
+    const headers = {
+      'headers': {
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      }
+    }
+    await api.delete("/produto/" + idProduto, headers)
     .then((response) => {
       setStatus({
         type: "success",
