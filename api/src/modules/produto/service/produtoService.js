@@ -56,12 +56,12 @@ const update = (async (req, res) => {
   .then(() => {
     return res.json({
       erro: false,
-      mensagem: "Produto editado com sucesso."
+      mensagem: 'Produto editado com sucesso.'
     });
   }).catch(() => {
     return res.status(400).json({
       erro: true,
-      message: "Não foi possível fazer a edição."
+      message: 'Não foi possível fazer a edição.'
     });
   });
 });
@@ -72,14 +72,14 @@ const remove = (async (req, res) => {
   .then(() => {
     return res.json({
       erro: false,
-      mensagem: "Produto excluído com sucesso."
+      mensagem: 'Produto excluído com sucesso.'
     });
   }).catch(() => {
     return res.status(400).json({
       erro: true,
-      mensagem: "Não foi possível excluir o produto."
+      mensagem: 'Não foi possível excluir o produto.'
     });
   });
 });
 
-module.exports = {findAll, save, get, update, remove};
+module.exports = { findAll, save, get, update, remove };

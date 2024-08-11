@@ -1,4 +1,4 @@
-const User = require('../model/User');
+const User = require('../model/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -62,12 +62,12 @@ const update = (async (req, res) => {
   .then(() => {
     return res.json({
       erro: false,
-      mensagem: "Usuário editado com sucesso."
+      mensagem: 'Usuário editado com sucesso.'
     });
   }).catch(() => {
     return res.status(400).json({
       erro: true,
-      message: "Não foi possível fazer a edição."
+      message: 'Não foi possível fazer a edição.'
     });
   });
 });
@@ -78,12 +78,12 @@ const remove = (async (req, res) => {
   .then(() => {
     return res.json({
       erro: false,
-      mensagem: "Usuário excluído com sucesso."
+      mensagem: 'Usuário excluído com sucesso.'
     });
   }).catch(() => {
     return res.status(400).json({
       erro: true,
-      mensagem: "Não foi possível excluir o usuário."
+      mensagem: 'Não foi possível excluir o usuário.'
     });
   });
 });
@@ -98,13 +98,13 @@ const login = (async (req, res) => {
   if(user === null) {
     return res.status(400).json({
       erro: true,
-      mensagem: "Erro: Usuário ou a senha incorreta."
+      mensagem: 'Erro: Usuário ou a senha incorreta.'
     })
   }
   if(!(await bcrypt.compare(req.body.password, user.password))) {
     return res.status(400).json({
       erro: true,
-      mensagem: "Erro: Usuário ou a senha incorreta."
+      mensagem: 'Erro: Usuário ou a senha incorreta.'
     })
   }
   var token = jwt.sign({ id: user.id }, process.env.SECRET, {
@@ -116,7 +116,7 @@ const login = (async (req, res) => {
   })
 });
 
-const validaToken = async (req, res) => {
+const validateToken = async (req, res) => {
   await User.findByPk(req.userId, { attributes: ['id', 'name', 'email'] })
   .then((user) => {
     return res.json({
@@ -131,4 +131,4 @@ const validaToken = async (req, res) => {
   })
 };
 
-module.exports = { findAll, save, get, update, remove, login, validaToken };
+module.exports = { findAll, save, get, update, remove, login, validateToken };
