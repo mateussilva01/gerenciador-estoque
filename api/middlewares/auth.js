@@ -3,7 +3,7 @@ const { promisify } = require('util');
 require('dotenv').config();
 
 module.exports = {
-  eAdmin: async function (req, res, next) {
+  authorizeAccess: async (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
       return res.status(400).json({
