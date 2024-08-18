@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Menu } from '../../components/Menu';
 import { Link, useLocation } from 'react-router-dom';
-
 import {
   Container,
   ConteudoTitulo,
@@ -17,7 +16,6 @@ import {
 import api from '../../config/configApi';
 
 export const Listar = () => {
-
   const { state } = useLocation();
   const [data, setData] = useState([]);
   const [status, setStatus ] = useState({
@@ -25,59 +23,36 @@ export const Listar = () => {
     mensagem: state ? state.mensagem : ""
   });
 
-  const listarProdutos = async () => {
+  const listar = async () => {
     const headers = {
-      'headers': {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
-      }
+      'headers': { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
     }
     await api.get('/produto', headers)
     .then((response) => {
       setData(response.data.produtos);
-    }).catch((err) => {
-      if(err.response) {
-        setStatus({
-          type: "error",
-          mensagem: err.response.data.mensagem
-        });
-      } else {
-        setStatus({
-          type: "error",
-          mensagem: "Erro: Tente mais tarde."
-        });
-      }
+    }).catch((error) => {
+      if (error.response)
+        setStatus({ type: "error", mensagem: error.response.data.mensagem });
+      setStatus({ type: "error", mensagem: "Erro: Tente mais tarde." });
     });
   }
 
   useEffect(() => {
-    listarProdutos();
-  },[]);
+    listar();
+  }, []);
 
-  const apagarProduto = async (idProduto) => {
+  const excluir = async (id) => {
     const headers = {
-      'headers': {
-        'Authorization': 'Bearer ' + localStorage.getItem('token')
-      }
+      'headers': { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
     }
-    await api.delete("/produto/" + idProduto, headers)
+    await api.delete("/produto/" + id, headers)
     .then((response) => {
-      setStatus({
-        type: "success",
-        mensagem: response.data.mensagem
-      });
-      listarProdutos();
-    }).catch((err) => {
-      if(err.response) {
-        setStatus({
-          type: "error",
-          mensagem: err.response.data.mensagem
-        });
-      } else {
-        setStatus({
-          type: "error",
-          mensagem: "Erro: Tente mais tarde."
-        });
-      }
+      setStatus({ type: "success", mensagem: response.data.mensagem });
+      listar();
+    }).catch((error) => {
+      if (error.response)
+        setStatus({ type: "error", mensagem: error.response.data.mensagem });
+      setStatus({ type: "error", mensagem: "Erro: Tente mais tarde." });
     });
   };
 
@@ -92,13 +67,12 @@ export const Listar = () => {
           </Link>
         </BotaoAcao>
       </ConteudoTitulo>
-      { status.type === "success" ? <AlertSuccess>{status.mensagem}</AlertSuccess> : "" }
-      { status.type === 'error' ? <AlertDanger>{status.mensagem}</AlertDanger> : "" }
+      { status.type === "success" ? <AlertSuccess>{ status.mensagem }</AlertSuccess> : "" }
+      { status.type === 'error' ? <AlertDanger>{ status.mensagem }</AlertDanger> : "" }
       <hr />
       <Table>
         <thead>
           <tr>
-            <th>ID</th>
             <th>Nome</th>
             <th>Preço</th>
             <th>Quantidade</th>
@@ -107,16 +81,15 @@ export const Listar = () => {
         </thead>
         <tbody>
           {data.map(produto => (
-            <tr key={produto.id}>
-              <td>{produto.id}</td>
-              <td>{produto.nome}</td>
+            <tr key={ produto.id }>
+              <td>{ produto.nome }</td>
               <td>{
                 new Intl.NumberFormat('pt-br', {
                   style: 'currency',
                   currency: 'BRL'
                 }).format(produto.preco_venda)}
               </td>
-              <td>{produto.quantidade}</td>
+              <td>{ produto.quantidade }</td>
               <td>
                 <Link to={"/visualizar/" + produto.id}>
                   <ButtonPrimary type="button">Visualizar</ButtonPrimary>
@@ -124,8 +97,8 @@ export const Listar = () => {
                 <Link to={"/editar/" + produto.id}>
                   <ButtonWarning type="button">Editar</ButtonWarning>
                 </Link>
-                <Link to={"#"}>
-                  <ButtonDanger onClick={() => apagarProduto(produto.id)}>Apagar</ButtonDanger>
+                <Link to={ "#" }>
+                  <ButtonDanger onClick={() => excluir(produto.id)}>Apagar</ButtonDanger>
                 </Link>
               </td>
             </tr>

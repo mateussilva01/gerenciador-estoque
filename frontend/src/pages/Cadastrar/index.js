@@ -17,78 +17,55 @@ import {
 import api from '../../config/configApi';
 
 export const Cadastrar = () => {
-
   const [produto, setProduto] = useState({
     nome: '',
     preco_compra: '',
     preco_venda: '',
     quantidade: ''
   });
+  const [precoCompra, setPrecoCompra] = useState();
+  const [precoVenda, setPrecoVenda] = useState();
+  const valueInput = e => setProduto({ ...produto, [e.target.name]: e.target.value });
+  const [status, setStatus] = useState({ type: '', mensagem: '' });
 
-  const [precoCompraTarget, setPrecoCompraTarget] = useState();
-  const [precoVendaTarget, setPrecoVendaTarget] = useState();
-
-  const valueInput = e => setProduto({ ...produto, [e.target.name]: e.target.value});
-
-  const [status, setStatus] = useState({
-    type: '',
-    mensagem: ''
-  })
-
-  const addProduto = async e => {
+  const gravar = async e => {
     e.preventDefault();
-
     const headers = {
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('token')
       }
     }
-
     await api.post('/produto', produto, headers)
     .then((response) => {
-      setStatus({
-        type: 'redSuccess',
-        mensagem: response.data.mensagem
-      });
-    }).catch((err) => {
-      if(err.response) {
-        setStatus({
-          type: 'error',
-          mensagem: err.response.data.mensagem
-        });
-      } else {
-          setStatus({
-            type: 'error',
-            mensagem: "Erro: Tente mais tarde."
-          });
-        }
+      setStatus({ type: 'redirectSuccess', mensagem: response.data.mensagem });
+    }).catch((error) => {
+      if (error.response)
+        setStatus({ type: 'error', mensagem: error.response.data.mensagem });
+      setStatus({ type: 'error', mensagem: "Error: Tente mais tarde." });
     })
-
   }
 
-  const valuePrecoCompra = async e => {
-    var valorPrecoCompraInput = e.target.value;
-    valorPrecoCompraInput = valorPrecoCompraInput.replace(/\D/g, "");
-    valorPrecoCompraInput = valorPrecoCompraInput.replace(/(\d)(\d{2})$/, "$1,$2");
-    valorPrecoCompraInput = valorPrecoCompraInput.replace(/(?=(\d{3})+(\D))\B/g, ".");
-    setPrecoCompraTarget(valorPrecoCompraInput);
-
-    var precoCompraSalvar  = await valorPrecoCompraInput.replace(".", "");
-    precoCompraSalvar = await precoCompraSalvar.replace(",", ".");
-    setProduto({ ...produto, preco_compra: precoCompraSalvar });
+  const formatarPrecoCompra = async e => {
+    var valor = e.target.value;
+    valor = valor.replace(/\D/g, "");
+    valor = valor.replace(/(\d)(\d{2})$/, "$1,$2");
+    valor = valor.replace(/(?=(\d{3})+(\D))\B/g, ".");
+    setPrecoCompra(valor);
+    var novoValor  = await valor.replace(".", "");
+    novoValor = await novoValor.replace(",", ".");
+    setProduto({ ...produto, preco_compra: novoValor });
   }
 
-  const valuePrecoVenda = async e => {
-    var precoVendaInput = e.target.value;
-    precoVendaInput = precoVendaInput.replace(/\D/g, "");
-    precoVendaInput = precoVendaInput.replace(/(\d)(\d{2})$/, "$1,$2");
-    precoVendaInput = precoVendaInput.replace(/(?=(\d{3})+(\D))\B/g, ".");
-    setPrecoVendaTarget(precoVendaInput);
-
-    var precoSalvarSalvar  = await precoVendaInput.replace(".", "");
-    precoSalvarSalvar = await precoSalvarSalvar.replace(",", ".");
-    setProduto({ ...produto, preco_venda: precoSalvarSalvar });
+  const formatarPrecoVenda = async e => {
+    var valor = e.target.value;
+    valor = valor.replace(/\D/g, "");
+    valor = valor.replace(/(\d)(\d{2})$/, "$1,$2");
+    valor = valor.replace(/(?=(\d{3})+(\D))\B/g, ".");
+    setPrecoVenda(valor);
+    var novoValor  = await valor.replace(".", "");
+    novoValor = await novoValor.replace(",", ".");
+    setProduto({ ...produto, preco_venda: novoValor });
   }
 
   return (
@@ -104,7 +81,7 @@ export const Cadastrar = () => {
       </ConteudoTitulo>
       { status.type === 'error' ? <AlertDanger>{status.mensagem}</AlertDanger> : "" }
       { status.type === 'success' ? <AlertSuccess>{status.mensagem}</AlertSuccess> : "" }
-      { status.type === 'redSuccess' ? <Redirect to={{
+      { status.type === 'redirectSuccess' ? <Redirect to={{
           pathname: "/listar",
           state: {
             type: "success",
@@ -113,7 +90,7 @@ export const Cadastrar = () => {
         }} /> : ""
       }
       <Hr />
-      <Form onSubmit={addProduto}>
+      <Form onSubmit={gravar}>
         <Label>Nome: </Label>
         <Input
           type="text"
@@ -124,18 +101,18 @@ export const Cadastrar = () => {
         <Label>Preço de compra: </Label>
         <Input
           type="text"
-          name="precoCompraTarget"
+          name="precoCompra"
           placeholder="Preço de compra"
-          value={precoCompraTarget}
-          onChange={valuePrecoCompra}
+          value={precoCompra}
+          onChange={formatarPrecoCompra}
         />
         <Label>Preço de venda: </Label>
         <Input
           type="text"
-          name="precoVendaTarget"
+          name="precoVenda"
           placeholder="Preço de venda"
-          value={precoVendaTarget}
-          onChange={valuePrecoVenda}
+          value={precoVenda}
+          onChange={formatarPrecoVenda}
         />
         <Label>Quantidade: </Label>
         <Input

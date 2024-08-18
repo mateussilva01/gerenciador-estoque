@@ -18,7 +18,7 @@ export const Visualizar = (props) => {
   const [status, setStatus ] = useState({ type: "", mensagem: "" });
 
   useEffect(() => {
-    const getProdutos = async () => {
+    const visualizar = async () => {
       const headers = {
         'headers': {
           'Content-Type': 'application/json',
@@ -29,20 +29,12 @@ export const Visualizar = (props) => {
       .then((response) => {
         setData(response.data.produto);
       }).catch((err) => {
-        if(err.response) {
-          setStatus({
-            type: "redErro",
-            mensagem: err.response.data.mensagem
-          })
-        } else {
-          setStatus({
-            type: "redErro",
-            mensagem: "Erro: Tente mais tarde."
-          })
-        }
+        if (err.response)
+          setStatus({ type: "redErro", mensagem: err.response.data.mensagem });
+        setStatus({ type: "redErro", mensagem: "Erro: Tente mais tarde." });
       })
     }
-    getProdutos();
+    visualizar();
   }, [id])
 
   return (
@@ -68,21 +60,22 @@ export const Visualizar = (props) => {
         }} /> : ""
       }
       <Hr />
-      <ConteudoView>ID: {data.id}</ConteudoView>
-      <ConteudoView>Nome: {data.nome}</ConteudoView>
+      <ConteudoView>Nome: { data.nome }</ConteudoView>
       <ConteudoView>
         Preço de compra: {
           new Intl.NumberFormat('pt-br', {
             style: 'currency',
             currency: 'BRL'
-          }).format(data.preco_compra)}
+          }).format(data.preco_compra)
+        }
       </ConteudoView>
       <ConteudoView>
         Preço de venda: {
           new Intl.NumberFormat('pt-br', {
             style: 'currency',
             currency: 'BRL'
-          }).format(data.preco_venda)}
+          }).format(data.preco_venda)
+        }
       </ConteudoView>
       <ConteudoView>Quantidade: {data.quantidade}</ConteudoView>
     </Container>
