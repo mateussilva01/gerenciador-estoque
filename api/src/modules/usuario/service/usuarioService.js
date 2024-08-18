@@ -1,17 +1,17 @@
-const User = require('../model/userModel');
+const Usuario = require('../model/usuarioModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const findAll = (async (req, res) => {
-  await User.findAll({
+  await Usuario.findAll({
     attributes: ['id', 'name', 'email'],
     order: [['id', 'DESC']]
   })
-  .then((users) => {
+  .then((usuarios) => {
     return res.json({
       erro: false,
-      users
+      usuarios
     });
   }).catch(() => {
     return res.status(400).json({
@@ -24,7 +24,7 @@ const findAll = (async (req, res) => {
 const save = (async (req, res) => {
   var dados = req.body;
   dados.password = await bcrypt.hash(dados.password, 8);
-  await User.create(dados)
+  await Usuario.create(dados)
   .then(() => {
     return res.json({
       erro: false,
@@ -40,11 +40,11 @@ const save = (async (req, res) => {
 
 const get = (async (req, res) => {
   const { id } = req.params;
-  await User.findByPk(id)
-  .then((user) => {
+  await Usuario.findByPk(id)
+  .then((usuario) => {
     return res.json({
       erro: false,
-      user
+      usuario
     });
   }).catch(() => {
     return res.status(400).json({
@@ -58,7 +58,7 @@ const update = (async (req, res) => {
   const { id } = req.body;
   const dados = req.body;
   dados.password = await bcrypt.hash(dados.password, 8);
-  await User.update(dados, { where: {id} })
+  await Usuario.update(dados, { where: {id} })
   .then(() => {
     return res.json({
       erro: false,
@@ -74,7 +74,7 @@ const update = (async (req, res) => {
 
 const remove = (async (req, res) => {
   const { id } = req.params;
-  await User.destroy({ where: { id } })
+  await Usuario.destroy({ where: { id } })
   .then(() => {
     return res.json({
       erro: false,
@@ -89,25 +89,25 @@ const remove = (async (req, res) => {
 });
 
 const login = (async (req, res) => {
-  const user = await User.findOne({
+  const usuario = await Usuario.findOne({
     attributes: ['id', 'name', 'email', 'password'],
     where: {
       email: req.body.email
     }
   });
-  if(user === null) {
+  if(usuario === null) {
     return res.status(400).json({
       erro: true,
       mensagem: 'Erro: Usuário ou a senha incorreta.'
     })
   }
-  if(!(await bcrypt.compare(req.body.password, user.password))) {
+  if(!(await bcrypt.compare(req.body.password, usuario.password))) {
     return res.status(400).json({
       erro: true,
       mensagem: 'Erro: Usuário ou a senha incorreta.'
     })
   }
-  var token = jwt.sign({ id: user.id }, process.env.SECRET, {
+  var token = jwt.sign({ id: usuario.id }, process.env.SECRET, {
     expiresIn: '1 day'
   })
   return res.json({
@@ -117,11 +117,11 @@ const login = (async (req, res) => {
 });
 
 const validateToken = async (req, res) => {
-  await User.findByPk(req.userId, { attributes: ['id', 'name', 'email'] })
-  .then((user) => {
+  await Usuario.findByPk(req.usuarioId, { attributes: ['id', 'name', 'email'] })
+  .then((usuario) => {
     return res.json({
       erro: false,
-      user
+      usuario
     });
   }).catch(() => {
     return res.status(400).json({

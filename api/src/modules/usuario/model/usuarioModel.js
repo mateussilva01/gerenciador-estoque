@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../../../configs/sequelize.config');
 
-const User = db.define('users', {
+const Usuario = db.define('usuarios', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -22,6 +22,6 @@ const User = db.define('users', {
 })
 
 //Create table
-User.sync();
+//Usuario.sync();
 
-module.exports = User;
+module.exports = Usuario;
